@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Eco.SYS: ecosystems game</title>
+    <title>The Presents Advice Social Network</title>
     <link rel="stylesheet" type="text/css" href="/stylesheets/commons.css" />
     <link rel="stylesheet" type="text/css" href="/stylesheets/users.css" />
 </head>
@@ -10,7 +10,7 @@
 <div id="main">
     <div id="title"></div>
     <div id="loginData">
-        <form action="/login" method="POST">
+        <form action="/users/login" method="POST">
             <% if (typeof errorMessage != 'undefined') { %>
             <div class="error">
                 <%= errorMessage %>

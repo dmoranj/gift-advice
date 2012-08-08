@@ -6,7 +6,17 @@ exports.showLogin = function(req, res){
 };
 
 exports.login = function(req, res) {
-
+    users.authenticate(req.body.login, req.body.password, function(err, doc) {
+        if (err) {
+            res.render(utils.select(req, 'login'), {
+                status: "ERROR",
+                errorMessage: "Wrong user or password"
+            });
+        } else {
+            req.session.user = req.body.login;
+            res.redirect('/home');
+        }
+    });
 }
 
 exports.showRegister = function(req, res) {
@@ -31,7 +41,6 @@ exports.register = function(req, res) {
                 infoMessage: "User successfully created"
             });
         }
-
     });
 }
 
@@ -44,4 +53,10 @@ exports.showUser = function(req, res) {
             nickname        : doc.nickname
         });
     });
+}
+
+exports.logout = function(req, res) {
+    delete req.session.user;
+
+    res.redirect('/users/login');
 }
