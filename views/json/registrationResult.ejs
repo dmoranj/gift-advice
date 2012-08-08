@@ -1,0 +1,10 @@
+{
+<% if (typeof errorMessage != 'undefined') { %>
+    "errorMessage": "<%= errorMessage %>",
+<% } %>
+<% if (typeof infoMessage != 'undefined') { %>
+    "infoMessage": "<%= infoMessage %>",
+<% } %>
+
+    "status": <%= status %>
+}

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>The Presents Advice Social Network</title>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/commons.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/users.css" />
+</head>
+
+<body>
+<div id="main">
+    <div id="title"></div>
+    <div id="registerData">
+        <% if (typeof errorMessage != 'undefined') { %>
+        <div class="error">
+            <%= errorMessage %>
+        </div>
+        <% } %>
+        <% if (typeof infoMessage != 'undefined') { %>
+        <div class="info">
+            <%= infoMessage %>
+        </div>
+        <% } %>
+    </div>
+</div>
+</body>
+
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>The Presents Advice Social Network</title>
+    <link rel="stylesheet" type="text/css" href="/stylesheets/commons.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/users.css" />
+</head>
+
+<body>
+<div id="main">
+    <div id="title"></div>
+    <div id="registerData">
+        <form action="/users/register" method="POST">
+            <div class="formField">
+                eMail: <input type="text" length="140" name="email" value="<%= email %>">
+            </div>
+            <div class="formField">
+                Password: <input type="password" length="140" name="password">
+            </div>
+            <div class="formField">
+                Nickname: <input type="text" length="140" name="nickname" value="<%= nickname %>">
+            </div>
+            <div class="formField">
+                Name: <input type="text" length="140" name="name" value="<%= name %>">
+            </div>
+            <div class="formField">
+                Surname: <input type="text" length="140" name="surname" value="<%= surname %>">
+            </div>
+            <div class="buttons">
+                <input type="submit" value="Create user">
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+
+</html>
