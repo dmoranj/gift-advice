@@ -5,11 +5,21 @@ function saveUser(userData, callback) {
 
     var userToCreate = new User();
 
-    for (attribute in userData) {
-        userToCreate[attribute] = userData[attribute];
-    }
+    if (!userData.nickname || userData.nickname == "" || !userData.password || userData.password == "") {
+        callback("User nickname and password are mandatory", null);
+    } else {
+        for (var attribute in userData) {
+            userToCreate[attribute] = userData[attribute];
+        }
 
-    userToCreate.save(callback);
+        User.findOne({nickname: userToCreate.nickname}, function(err, doc) {
+            if (doc) {
+                callback("A user exists with the same nickname", null);
+            } else {
+                userToCreate.save(callback);
+            }
+        })
+    }
 }
 
 function findUser(userId, callback) {
@@ -30,6 +40,19 @@ function authUser(userId, password, callback) {
     });
 }
 
+function deleteUser(userId, callback) {
+    var User = db.mongoose.model('User');
+
+    User.findOne({nickname: userId}, function(err, user) {
+        if (err) {
+            callback(err, null);
+        } else {
+            user.remove(callback);
+        }
+    });
+}
+
 exports.save= saveUser;
 exports.find= findUser;
 exports.authenticate = authUser;
+exports.delete = deleteUser;

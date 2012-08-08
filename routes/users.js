@@ -45,14 +45,30 @@ exports.register = function(req, res) {
 }
 
 exports.showUser = function(req, res) {
-    users.find(req.params.userId, function(err, doc) {
+    users.find(req.params.userId, function(err, user) {
         res.render(utils.select(req, 'register'), {
-            name            : doc.name,
-            email           : doc.email,
-            surname         : doc.surname,
-            nickname        : doc.nickname
+            name            : user.name,
+            email           : user.email,
+            surname         : user.surname,
+            nickname        : user.nickname
         });
     });
+}
+
+exports.delete = function (req, res) {
+    users.delete(req.params.userId, function(err, user) {
+        if (err) {
+            res.render(utils.select(req, 'taskResult'), {
+                status: "ERROR",
+                errorMessage: err
+            });
+        } else {
+            res.render(utils.select(req, 'taskResult'), {
+                status: "OK",
+                infoMessage: "User successfully created"
+            });
+        }
+    })
 }
 
 exports.logout = function(req, res) {

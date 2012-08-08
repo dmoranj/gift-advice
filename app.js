@@ -18,7 +18,6 @@ app.configure(function(){
   app.use(express.favicon());
   app.use(express.logger('dev'));
   app.use(express.bodyParser());
-  app.use(express.methodOverride());
   app.use(express.cookieParser('The red dog is feeling blue'));
   app.use(express.session());
   app.use(app.router);
@@ -51,11 +50,10 @@ app.get('/users/logout', users.logout);
 app.get('/users/register', users.showRegister);
 app.post('/users/register', users.register);
 app.get('/users/:userId', requiresLogin, users.showUser);
+app.delete('/users/:userId', users.delete);
 
 // Advice related routes
 
-
-
 http.createServer(app).listen(app.get('port'), function(){
-  console.log("Express server listening on port " + app.get('port'));
+  console.log("Server listening on port " + app.get('port'));
 });

@@ -11,6 +11,7 @@
         "mongoose" : "*",
         "async": "*",
         "socket.io": "*",
-        "mocha" : "*"
+        "mocha" : "*",
+        "request": "*"
     }
 }
