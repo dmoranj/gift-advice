@@ -6,6 +6,7 @@
 var express = require('express')
   , home = require('./routes/home')
   , users = require('./routes/users')
+  , requests = require('./routes/requests')
   , http = require('http')
   , path = require('path')
   , fs = require('fs');
@@ -55,6 +56,10 @@ app.post('/users/register', users.register);
 app.get('/users/:userId', requiresLogin, users.showUser);
 app.delete('/users/:userId', requiresLogin, users.delete);
 app.get('/users', requiresLogin, users.listUsers);
+
+// Request related routes
+app.post('/requests', requests.create);
+
 
 // Advice related routes
 
