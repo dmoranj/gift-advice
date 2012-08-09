@@ -1,9 +1,6 @@
 Presents Advice
 ===========
 
-:Author:    Daniel Moran
-:Email:     dmoranj@gmail.com
-:Revision:  0.1
 
 This project is the backend for a social application aimed to provide advice for the gifts you
 may want to give to your relatives. The advice will come from two sources: the personal human
