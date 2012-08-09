@@ -19,9 +19,10 @@ testRequestParams =
   hobbieTags      : ["cooking", "jogging", "stamps", "tubophonist"]
   age             : 56
   profession      : "Computer geek"
-  guid            : "1234EFD"
 
 describe 'Requests', ->
+  receivedGUID = ""
+
   before (done) ->
     app = require "../app.js"
 
@@ -43,6 +44,7 @@ describe 'Requests', ->
     it 'should create a unique GUID for the request (and return it)', (done) ->
       request options, (error, response, body) ->
         assert.equal (body.guid != undefined),  true
+        receivedGUID = body.guid
         done()
 
 
@@ -52,9 +54,19 @@ describe 'Requests', ->
     it 'should not retrieve the request of the other users'
 
   describe 'Find', ->
-    it 'should recover all the fields from the db'
+    options =
+      url:    "http://localhost:3000/request/" + receivedGUID,
+      method: "GET"
+      json: {}
+
+    it 'should recover fields from the db', (done) ->
+      request options, (error, response, body) ->
+        assert.equal body.description,  "Example advice"
+        assert.equal body.profession, "Computer geek"
+        assert.equal body.age, 56
+        done()
 
     it 'should raise an error if the request is not found'
 
   describe 'Delete', ->
-    it 'shoul remove the request from the db'
+    it 'should remove the request from the db', (done)
