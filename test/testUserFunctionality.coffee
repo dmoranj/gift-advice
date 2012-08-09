@@ -66,19 +66,36 @@ describe 'Users', ->
     options =
       url:    "http://localhost:3000/users/dmoranj",
       method: "GET"
-      headers:
-        Accept: "application/json"
+      json: {}
 
-    it 'should retrieve all the fields from the DB'
-
-
-    it 'should return an error if user not found'
-
-    after (done) ->
-      deleteOptions =
-        url:    "http://localhost:3000/users/dmoranj",
-        method: "DELETE"
-        json: {}
-
-      request deleteOptions, (error, response, body) ->
+    it 'should retrieve all the fields from the DB', (done) ->
+      request options, (error, response, body) ->
+        assert.equal body.status,  "OK"
+        assert.equal body.nickname, "dmoranj"
+        assert.equal body.email, "dmoranj@gmail.com"
         done()
+
+
+    it 'should return an error if user not found', (done) ->
+      options.url = "http://localhost:3000/users/godzilla"
+      request options, (error, response, body) ->
+        assert.equal body.status,  "ERROR"
+        done()
+
+  describe 'Delete', ->
+    it 'should remove the user from the db', (done) ->
+        deleteOptions =
+          url:    "http://localhost:3000/users/dmoranj",
+          method: "DELETE"
+          json: {}
+
+        request deleteOptions, (error, response, body) ->
+          listOptions =
+            url:    "http://localhost:3000/users",
+            method: "GET"
+            json: {}
+
+          request listOptions, (error, response, body) ->
+            assert.equal body.status,  "OK"
+            assert.equal body.users.length, 0
+            done()

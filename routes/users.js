@@ -46,12 +46,20 @@ exports.register = function(req, res) {
 
 exports.showUser = function(req, res) {
     users.find(req.params.userId, function(err, user) {
-        utils.select(res, req, 'register', {
-            name            : user.name,
-            email           : user.email,
-            surname         : user.surname,
-            nickname        : user.nickname
-        });
+        if (user==null) {
+            utils.select(res, req, 'register', {
+                status          : "ERROR",
+                errorMessage    : "User not found"
+            });
+        } else {
+            utils.select(res, req, 'register', {
+                name            : user.name,
+                email           : user.email,
+                surname         : user.surname,
+                nickname        : user.nickname,
+                status          : "OK"
+            });
+        }
     });
 }
 
