@@ -7,16 +7,19 @@ var express = require('express')
   , home = require('./routes/home')
   , users = require('./routes/users')
   , http = require('http')
-  , path = require('path');
+  , path = require('path')
+  , fs = require('fs');
 
 var app = express();
+
+var logFile = fs.createWriteStream('./express.log', {flags: 'a'});
 
 app.configure(function(){
   app.set('port', process.env.PORT || 3000);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'ejs');
   app.use(express.favicon());
-  app.use(express.logger('dev'));
+  app.use(express.logger({stream: logFile}));
   app.use(express.bodyParser());
   app.use(express.cookieParser('The red dog is feeling blue'));
   app.use(express.session());
@@ -50,10 +53,10 @@ app.get('/users/logout', users.logout);
 app.get('/users/register', users.showRegister);
 app.post('/users/register', users.register);
 app.get('/users/:userId', requiresLogin, users.showUser);
-app.delete('/users/:userId', users.delete);
+app.delete('/users/:userId', requiresLogin, users.delete);
 
 // Advice related routes
 
 http.createServer(app).listen(app.get('port'), function(){
-  console.log("Server listening on port " + app.get('port'));
+
 });
