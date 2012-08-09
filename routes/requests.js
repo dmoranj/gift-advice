@@ -12,11 +12,27 @@ function createRequest(req, res) {
         } else {
             utils.select(res, req, 'createdRequest', {
                 status: "OK",
-                errorMessage: "Request created",
+                infoMessage: "Request created",
                 guid: request.guid
             });
         }
     });
 }
 
+function showRequest(req, res) {
+    requests.find(req.params.requestId, function(err, request) {
+        if (err) {
+            utils.select(res, req, 'requestEdition', {
+                status: "ERROR",
+                errorMessage: "The request could not be created" + err
+            });
+        } else {
+            request.status = "OK";
+            request.infoMessage = "Request created";
+            utils.select(res, req, 'requestEdition', request);
+        }
+    });
+}
+
 exports.create = createRequest;
+exports.show = showRequest;

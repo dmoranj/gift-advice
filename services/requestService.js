@@ -20,4 +20,11 @@ function saveRequest(requestData, callback) {
     }
 }
 
+function findRequest(requestId, callback) {
+    var Request = db.mongoose.model('Request');
+
+    Request.findOne({guid: requestId}, callback);
+}
+
 exports.save= saveRequest;
+exports.find= findRequest;
