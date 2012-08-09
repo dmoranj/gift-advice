@@ -44,7 +44,6 @@ describe 'Requests', ->
     it 'should create a unique GUID for the request (and return it)', (done) ->
       request options, (error, response, body) ->
         assert.equal (body.guid != undefined),  true
-        console.log("GUID:" + body.guid)
         receivedGUID = body.guid
         done()
 
@@ -55,13 +54,13 @@ describe 'Requests', ->
     it 'should not retrieve the request of the other users'
 
   describe 'Find', ->
+    baseUrl = "http://localhost:3000/requests/"
     options =
-      url:    "http://localhost:3000/requests/",
       method: "GET",
       json: {}
 
     it 'should recover fields from the db', (done) ->
-      options.url += receivedGUID
+      options.url = baseUrl + receivedGUID
 
       request options, (error, response, body) ->
         assert.equal body.description,  "Example advice"
@@ -69,7 +68,13 @@ describe 'Requests', ->
         assert.equal body.age, 56
         done()
 
-    it 'should raise an error if the request is not found'
+    it 'should raise an error if the request is not found', (done) ->
+      options.url = baseUrl + "OPQOPQOPQ"
+
+      request options, (error, response, body) ->
+        assert.equal body.status,  "ERROR"
+        done()
+
 
   describe 'Delete', ->
     it 'should remove the request from the db'

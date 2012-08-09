@@ -21,7 +21,7 @@ function createRequest(req, res) {
 
 function showRequest(req, res) {
     requests.find(req.params.requestId, function(err, request) {
-        if (err) {
+        if (err || request == null) {
             utils.select(res, req, 'requestEdition', {
                 status: "ERROR",
                 errorMessage: "The request could not be created" + err
