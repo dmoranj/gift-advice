@@ -22,7 +22,10 @@ testUserParams =
 describe 'Users', ->
   before (done) ->
     app = require "../app.js"
-    done()
+
+    request loginOptions, (error, response, body) ->
+      authCookies = response.headers['set-cookie']
+      done()
 
   describe 'Creation', ->
     options =
@@ -46,31 +49,36 @@ describe 'Users', ->
         assert.equal body.status,  "ERROR"
         done()
 
-    after (done) ->
-      request options, (error, response, body) ->
-        authCookies = response.headers['set-cookie']
-
-        deleteOptions =
-          url:    "http://localhost:3000/users/dmoranj",
-          method: "DELETE"
-          json: {}
-          headers:
-            Cookie: authCookies
-
-        request deleteOptions, (error, response, body) ->
-          done()
-
   describe 'List', ->
-    before (done) ->
-      done()
+    options =
+      url:    "http://localhost:3000/users",
+      method: "GET"
+      json: {}
 
-    it 'should retrieve all the created users'
-
-    after (done) ->
-      done()
+    it 'should retrieve all the created users', (done) ->
+      request options, (error, response, body) ->
+        assert.equal body.status,  "OK"
+        assert.equal body.users.length, 1
+        assert.equal body.users[0].nickname, "dmoranj"
+        done()
 
   describe 'Find', ->
+    options =
+      url:    "http://localhost:3000/users/dmoranj",
+      method: "GET"
+      headers:
+        Accept: "application/json"
+
     it 'should retrieve all the fields from the DB'
+
 
     it 'should return an error if user not found'
 
+    after (done) ->
+      deleteOptions =
+        url:    "http://localhost:3000/users/dmoranj",
+        method: "DELETE"
+        json: {}
+
+      request deleteOptions, (error, response, body) ->
+        done()

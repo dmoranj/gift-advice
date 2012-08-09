@@ -54,6 +54,7 @@ app.get('/users/register', users.showRegister);
 app.post('/users/register', users.register);
 app.get('/users/:userId', requiresLogin, users.showUser);
 app.delete('/users/:userId', requiresLogin, users.delete);
+app.get('/users', requiresLogin, users.listUsers);
 
 // Advice related routes
 

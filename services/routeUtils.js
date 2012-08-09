@@ -1,8 +1,9 @@
-function selectByType(req, route) {
-    if (req.headers.accept.indexOf("json") > 0) {
-        return "json/" + route;
+
+function selectByType(res, req, route, data) {
+    if (req.headers.accept && req.headers.accept.indexOf("json") > 0) {
+        res.json(data);
     } else {
-        return "html/" + route;
+        res.render("html/" + route, data);
     }
 }
 

@@ -52,7 +52,14 @@ function deleteUser(userId, callback) {
     });
 }
 
+function getUserList(callback) {
+    var User = db.mongoose.model('User');
+
+    User.find({}, callback);
+}
+
 exports.save= saveUser;
 exports.find= findUser;
 exports.authenticate = authUser;
 exports.delete = deleteUser;
+exports.getList = getUserList;
