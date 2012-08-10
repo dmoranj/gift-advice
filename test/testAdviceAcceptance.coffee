@@ -86,6 +86,8 @@ describe "Advices", ->
         assert.equal body.status, "ERROR"
         done()
 
+    it 'should notify the requester that he has a new advice'
+
   describe "List", ->
 
     alternateAdviceGUID = ""

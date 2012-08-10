@@ -49,6 +49,8 @@ describe 'Requests', ->
         receivedGUID = body.guid
         done()
 
+    it 'should notify the advisors that they have a new request'
+
   describe 'List', ->
     before (done) ->
       creationOptions.url = "http://localhost:3000/users/gamera/requests"
