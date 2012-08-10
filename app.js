@@ -8,6 +8,7 @@ var express = require('express')
   , users = require('./routes/users')
   , requests = require('./routes/requests')
   , advices = require('./routes/advices')
+  , notifications = require('./routes/notifications')
   , http = require('http')
   , path = require('path')
   , fs = require('fs');
@@ -70,6 +71,9 @@ app.get('/users/:requester/advices', requiresLogin, advices.listByUser);
 app.get('/users/:requester/requests/:requestId/advices', requiresLogin, advices.list);
 app.delete('/users/:requester/requests/:requestId/advices/:adviceId', requiresLogin, advices.delete);
 app.get('/users/:requester/requests/:requestId/advices/:adviceId', requiresLogin, advices.show);
+
+// Notification related routes
+app.post('/users/:requester/notifications', requiresLogin, notifications.create);
 
 
 http.createServer(app).listen(app.get('port'), function(){
