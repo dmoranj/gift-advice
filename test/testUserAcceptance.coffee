@@ -1,5 +1,6 @@
 assert = require 'assert'
 request = require 'request'
+test = require '../testUtils'
 
 loginParams =
   login: "dmoranj"
@@ -21,7 +22,8 @@ testUserParams =
 
 describe 'Users', ->
   before (done) ->
-    app = require "../app.js"
+    if test.opts.launchApp
+      app = require "../app.js"
 
     request loginOptions, (error, response, body) ->
       authCookies = response.headers['set-cookie']

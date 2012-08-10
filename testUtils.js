@@ -1,0 +1,4 @@
+
+exports.opts = {
+    launchApp: true
+}

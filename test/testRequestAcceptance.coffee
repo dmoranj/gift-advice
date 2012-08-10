@@ -1,5 +1,7 @@
 assert = require 'assert'
 request = require 'request'
+async = require 'async'
+test = require '../testUtils'
 
 loginParams =
   login: "dmoranj"
@@ -12,7 +14,6 @@ loginOptions =
   method: "POST",
   json:   loginParams
 
-
 testRequestParams =
   description     : "Example advice"
   advisors        : ["dmoranj"]
@@ -20,38 +21,57 @@ testRequestParams =
   age             : 56
   profession      : "Computer geek"
 
+creationOptions =
+  url:    "http://localhost:3000/users/godzilla/requests",
+  method: "POST",
+  json:   testRequestParams
+
+optionsList =
+  url:    "http://localhost:3000/users/godzilla/requests",
+  method: "GET",
+  json:   {}
+
+baseUrlDelete = "http://localhost:3000/users/godzilla/requests/";
+optionsDelete =
+  method: "DELETE",
+  json: {}
+
 describe 'Requests', ->
   receivedGUID = "ooo"
 
   before (done) ->
-    app = require "../app.js"
+    if test.opts.launchApp
+      app = require "../app.js"
 
     request loginOptions, (error, response, body) ->
       authCookies = response.headers['set-cookie']
       done()
 
   describe 'Creation', ->
-    options =
-      url:    "http://localhost:3000/requests",
-      method: "POST",
-      json:   testRequestParams
-
     it 'should persist the request in the db', (done) ->
-      request options, (error, response, body) ->
+      request creationOptions, (error, response, body) ->
         assert.equal body.status,  "OK"
         done()
 
     it 'should create a unique GUID for the request (and return it)', (done) ->
-      request options, (error, response, body) ->
+      request creationOptions, (error, response, body) ->
         assert.equal (body.guid != undefined),  true
         receivedGUID = body.guid
         done()
 
-
   describe 'List', ->
-    it 'should retrieve the list of request for the given user'
+    before (done) ->
+      creationOptions.url = "http://localhost:3000/users/gamera/requests"
+      request creationOptions, (error, response, body) ->
+        assert.equal body.status,  "OK"
+        done()
 
-    it 'should not retrieve the request of the other users'
+    it 'should retrieve the list of request of the given user (and only theirs)', (done) ->
+
+     request optionsList, (error, response, body) ->
+       assert.equal body.requests.length,  2
+       assert.equal body.requests[0].age, 56
+       done()
 
   describe 'Find', ->
     baseUrl = "http://localhost:3000/requests/"
@@ -77,4 +97,29 @@ describe 'Requests', ->
 
 
   describe 'Delete', ->
-    it 'should remove the request from the db'
+    it 'should remove the request from the db', (done) ->
+      optionsDelete.url = baseUrlDelete + receivedGUID
+
+      request optionsDelete, (error, response, body) ->
+        assert.equal body.status,  "OK"
+
+        request optionsList, (error, response, body) ->
+          assert.equal body.requests.length,  1
+          done()
+
+
+  after (done) ->
+    deleteFn = (req, callback) ->
+      optionsDelete.url = baseUrlDelete.replace("godzilla", req.requester) + req.guid
+      request optionsDelete, (error, response, body) ->
+        assert.equal body.status, "OK"
+        callback(null, "OK")
+
+    deleteListFn = (name, callback) ->
+      optionsList.url = optionsList.url.replace("godzilla", name)
+      request optionsList, (error, response, body) ->
+        async.map body.requests, deleteFn, callback
+
+    async.map ["godzilla", "gamera"], deleteListFn, (entity, callback) ->
+      done()
+

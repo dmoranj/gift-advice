@@ -55,12 +55,13 @@ app.get('/users/register', users.showRegister);
 app.post('/users/register', users.register);
 app.get('/users/:userId', requiresLogin, users.showUser);
 app.delete('/users/:userId', requiresLogin, users.delete);
-app.get('/users', requiresLogin, users.listUsers);
+app.get('/users', requiresLogin, users.list);
 
 // Request related routes
 app.get('/requests/:requestId', requiresLogin, requests.show);
-app.post('/requests', requests.create);
-
+app.get('/users/:requester/requests', requiresLogin, requests.list);
+app.post('/users/:requester/requests', requiresLogin, requests.create);
+app.delete('/users/:requester/requests/:requestId', requiresLogin, requests.delete);
 
 
 // Advice related routes

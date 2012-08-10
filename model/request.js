@@ -11,6 +11,7 @@ var Request = new Schema({
     , age             : Number
     , profession      : String
     , guid            : String
+    , requester       : String
 });
 
 mongoose.model('Request', Request);

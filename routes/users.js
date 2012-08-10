@@ -85,7 +85,7 @@ exports.logout = function(req, res) {
     res.redirect('/users/login');
 }
 
-exports.listUsers = function(req, res) {
+exports.list = function(req, res) {
     users.getList(function (err, list) {
         if (err) {
             utils.select(res, req, 'userList', {

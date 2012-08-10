@@ -1,8 +1,7 @@
-var db = require("../model/dbUtils");
+var db = require("../model/dbUtils"),
+    User = db.mongoose.model('User');
 
 function saveUser(userData, callback) {
-    var User = db.mongoose.model('User');
-
     var userToCreate = new User();
 
     if (!userData.nickname || userData.nickname == "" || !userData.password || userData.password == "") {
@@ -23,14 +22,10 @@ function saveUser(userData, callback) {
 }
 
 function findUser(userId, callback) {
-    var User = db.mongoose.model('User');
-
     User.findOne({nickname: userId}, callback);
 }
 
 function authUser(userId, password, callback) {
-    var User = db.mongoose.model('User');
-
     User.findOne({nickname: userId}, function(err, doc) {
         if (!err && doc && doc.password==password) {
             callback(null, doc);
@@ -41,8 +36,6 @@ function authUser(userId, password, callback) {
 }
 
 function deleteUser(userId, callback) {
-    var User = db.mongoose.model('User');
-
     User.findOne({nickname: userId}, function(err, user) {
         if (err) {
             callback(err, null);
@@ -53,8 +46,6 @@ function deleteUser(userId, callback) {
 }
 
 function getUserList(callback) {
-    var User = db.mongoose.model('User');
-
     User.find({}, callback);
 }
 

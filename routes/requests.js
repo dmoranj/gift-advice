@@ -2,7 +2,8 @@ var requests = require('../services/requestService'),
     utils = require('../services/routeUtils')
 
 
-function createRequest(req, res) {
+exports.create = function (req, res) {
+    req.body.requester = req.params.requester;
     requests.save(req.body, function(err, request) {
         if (err) {
             utils.select(res, req, 'createdRequest', {
@@ -19,7 +20,7 @@ function createRequest(req, res) {
     });
 }
 
-function showRequest(req, res) {
+exports.show = function (req, res) {
     requests.find(req.params.requestId, function(err, request) {
         if (err || request == null) {
             utils.select(res, req, 'requestEdition', {
@@ -34,5 +35,35 @@ function showRequest(req, res) {
     });
 }
 
-exports.create = createRequest;
-exports.show = showRequest;
+exports.list = function (req, res) {
+    requests.list(req.params.requester, function(err, requests) {
+        if (err || requests == null) {
+            utils.select(res, req, 'requestList', {
+                status: "ERROR",
+                errorMessage: "The request list could not be retrieved from db: " + err
+            });
+        } else {
+            utils.select(res, req, 'requestList', {
+                status:         "OK",
+                infoMessage:    "Request list retrieved.",
+                requests: requests
+            });
+        }
+    });
+}
+
+exports.delete = function(req,res) {
+    requests.delete(req.params.requestId, function(err, request) {
+        if (err || requests == null) {
+            utils.select(res, req, 'requestList', {
+                status: "ERROR",
+                errorMessage: "The request list could not be removed from db: " + err
+            });
+        } else {
+            utils.select(res, req, 'requestList', {
+                status:         "OK",
+                infoMessage:    "Request deleted."
+            });
+        }
+    })
+}

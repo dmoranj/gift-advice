@@ -1,10 +1,10 @@
 var
     db = require("../model/dbUtils"),
-    utils = require("./dataUtils");
+    utils = require("./dataUtils"),
+    Request = db.mongoose.model('Request');
 
 
 function saveRequest(requestData, callback) {
-    var Request = db.mongoose.model('Request');
 
     var requestToCreate = new Request();
 
@@ -21,10 +21,24 @@ function saveRequest(requestData, callback) {
 }
 
 function findRequest(requestId, callback) {
-    var Request = db.mongoose.model('Request');
-
     Request.findOne({guid: requestId}, callback);
+}
+
+function listRequests(requesterId, callback) {
+    Request.find({requester: requesterId}, callback);
+}
+
+function deleteRequest(requestId, callback) {
+    Request.findOne({guid: requestId}, function (err, request) {
+        if (err || request == null) {
+            callback(err, null);
+        } else {
+            request.remove(callback);
+        }
+    });
 }
 
 exports.save= saveRequest;
 exports.find= findRequest;
+exports.list= listRequests;
+exports.delete= deleteRequest;
