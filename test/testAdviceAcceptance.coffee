@@ -38,6 +38,7 @@ optionsDelete =
 describe "Advices", ->
   mainRequestGUID = ""
   forbiddenRequestGUID = ""
+  createdAdviceGUID = ""
 
   before (done) ->
     if test.opts.launchApp
@@ -66,6 +67,7 @@ describe "Advices", ->
       request options, (error, response, body) ->
         assert.equal body.status, "OK"
         assert.equal (body.guid != undefined),  true
+        createdAdviceGUID = body.guid
         done()
 
     it 'should not allow non-advisors to create advice', (done) ->
@@ -86,10 +88,33 @@ describe "Advices", ->
 
   describe 'Find', ->
 
-    it 'should retrieve the advice information from the db given the GUID'
+    it 'should retrieve the advice information from the db given the GUID', (done) ->
+      options =
+        url:    "http://localhost:3000/users/godzilla/requests/" + forbiddenRequestGUID + "/advices/" + createdAdviceGUID
+        method: "GET",
+        json:   {}
+
+      request options, (error, response, body) ->
+        debugger
+        assert.equal body.status, "OK"
+        assert.equal body.advice.title, "Cookies"
+        assert.equal body.advice.urls.length, 2
+        done()
+
+    it 'should raise an error if the advice is not found'
 
   describe 'Delete', ->
-    it 'should remove the selected advice from de DB'
+    it 'should remove the selected advice from de DB', (done) ->
+      options =
+        url:    "http://localhost:3000/users/godzilla/requests/" + forbiddenRequestGUID + "/advices/" + createdAdviceGUID
+        method: "DELETE",
+        json:   {}
+
+      request options, (error, response, body) ->
+        assert.equal body.status, "OK"
+        done()
+
+    it 'should allow to remove the advice only to its advisor'
 
   after (done) ->
     deleteFn = (req, callback) ->

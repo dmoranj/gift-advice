@@ -97,6 +97,8 @@ describe 'Requests', ->
           assert.equal body.requests.length,  1
           done()
 
+    it 'should only allow the requestor to remove its requests '
+
 
   after (done) ->
     deleteFn = (req, callback) ->
@@ -112,4 +114,3 @@ describe 'Requests', ->
 
     async.map ["godzilla", "gamera"], deleteListFn, (entity, callback) ->
       done()
-

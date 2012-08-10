@@ -66,6 +66,8 @@ app.delete('/users/:requester/requests/:requestId', requiresLogin, requests.dele
 
 // Advice related routes
 app.post('/users/:requester/requests/:requestId/advices', requiresLogin, advices.create);
+app.delete('/users/:requester/requests/:requestId/advices/:adviceId', requiresLogin, advices.delete);
+app.get('/users/:requester/requests/:requestId/advices/:adviceId', requiresLogin, advices.show);
 
 http.createServer(app).listen(app.get('port'), function(){
 
