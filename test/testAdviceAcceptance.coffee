@@ -23,6 +23,12 @@ testAdviceParams =
   urls              : ["www.google.com", "www.cookie.com"],
   usefulnes         : 4
 
+otherAdviceParams =
+  title             : "Ties"
+  text              : "Another boring tie is allways wellcome",
+  urls              : ["www.tie-shop.com"],
+  usefulnes         : 1
+
 optionsList =
   url:    "http://localhost:3000/users/godzilla/requests",
   method: "GET",
@@ -82,15 +88,51 @@ describe "Advices", ->
 
   describe "List", ->
 
+    alternateAdviceGUID = ""
+
+    before (done) ->
+      options =
+        url:    "http://localhost:3000/users/godzilla/requests/" + forbiddenRequestGUID + "/advices"
+        method: "POST",
+        json:   otherAdviceParams
+
+      request test.alternateLoginOptions, (error, response, body) ->
+        request options, (error, response, body) ->
+          assert.equal body.status, "OK"
+          alternateAdviceGUID = body.guid
+          request test.loginOptions, (error, response, body) ->
+            done()
+
     it 'should list all the advices provided by a user'
 
-    it 'should list all the advices related to a request'
+    it 'should list all the advices related to a request', (done) ->
+      options =
+        url:    "http://localhost:3000/users/godzilla/requests/" + forbiddenRequestGUID + "/advices"
+        method: "GET",
+        json:   {}
+
+      request options, (error, response, body) ->
+        assert.equal body.status, "OK"
+        assert.equal body.advices.length, 1
+        done()
+
+    after (done) ->
+      options =
+        url:    "http://localhost:3000/users/gamera/requests/" + forbiddenRequestGUID + "/advices/" + alternateAdviceGUID
+        method: "DELETE",
+        json:   {}
+
+      request test.alternateLoginOptions, (error, response, body) ->
+        request options, (error, response, body) ->
+          assert.equal body.status, "OK"
+          done()
+
 
   describe 'Find', ->
 
     it 'should retrieve the advice information from the db given the GUID', (done) ->
       options =
-        url:    "http://localhost:3000/users/godzilla/requests/" + forbiddenRequestGUID + "/advices/" + createdAdviceGUID
+        url:    "http://localhost:3000/users/godzilla/requests/" + mainRequestGUID + "/advices/" + createdAdviceGUID
         method: "GET",
         json:   {}
 

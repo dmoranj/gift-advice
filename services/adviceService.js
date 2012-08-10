@@ -25,7 +25,7 @@ exports.create = function(adviceToCreate, callback) {
 }
 
 exports.delete = function(adviceGuid, callback) {
-    Advice.findOne({}, function(err, advice) {
+    Advice.findOne({guid: adviceGuid}, function(err, advice) {
         if (err || advice==null) {
             callback("Error deleting or advice not found: " + err, null);
         } else {
@@ -36,4 +36,8 @@ exports.delete = function(adviceGuid, callback) {
 
 exports.find = function(adviceGuid, callback) {
     Advice.findOne({guid: adviceGuid}, callback);
+}
+
+exports.list = function(requestGuid, callback) {
+    Advice.find({requestGUID: requestGuid}, callback);
 }

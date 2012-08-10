@@ -56,3 +56,20 @@ exports.show = function(req, res) {
         }
     });
 }
+
+exports.list = function(req, res) {
+    advices.list(req.params.requestId, function(err, advices) {
+        if (err) {
+            util.select(res, req, 'adviceList', {
+                status: "ERROR",
+                errorMessage: "Advice list could not be retrieved: " + err
+            }, 500);
+        } else {
+            util.select(res, req, 'adviceList', {
+                status: "OK",
+                infoMessage: "Advice list retrieved",
+                advices: advices
+            });
+        }
+    });
+}
