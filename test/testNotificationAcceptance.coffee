@@ -12,6 +12,8 @@ testNotificationParams =
 #---------------------------------------------------------------------------------
 describe 'Notifications', ->
 
+  createdNotificationGUID = ""
+
   before (done) ->
     if test.opts.launchApp
       app = require "../app.js"
@@ -43,7 +45,15 @@ describe 'Notifications', ->
 
   describe 'Delete', ->
 
-    it 'should remove the notification from the db'
+    options =
+      method: "DELETE",
+      json:   {}
+
+    it 'should remove the notification from the db', (done) ->
+      options.url = "http://localhost:3000/users/godzilla/notifications/" + createdNotificationGUID
+      request options, (error, response, body) ->
+        assert.equal body.status, "OK"
+        done()
 
     it 'should allow to remove the notification only to the receiver'
 

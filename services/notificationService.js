@@ -16,3 +16,14 @@ exports.create = function (sender, notificationData, callback) {
     notificationToCreate.date = new Date();
     notificationToCreate.save(callback);
 }
+
+exports.delete = function(notificationId, callback) {
+
+    Notification.findOne({guid: notificationId}, function(err, notification) {
+        if (err || notification== null) {
+            callback("Couldn't find the notification", null);
+        } else {
+            notification.remove(callback);
+        }
+    });
+}
