@@ -3,19 +3,8 @@ request = require 'request'
 async = require 'async'
 test = require '../testUtils'
 
-loginParams =
-  login: "dmoranj"
-  password: "pipopipopi"
-
-authCookies = null
-
-loginOptions =
-  url:    "http://localhost:3000/users/login",
-  method: "POST",
-  json:   loginParams
-
 testRequestParams =
-  description     : "Example advice"
+  description     : "Example request for advice"
   advisors        : ["dmoranj"]
   hobbieTags      : ["cooking", "jogging", "stamps", "tubophonist"]
   age             : 56
@@ -36,6 +25,8 @@ optionsDelete =
   method: "DELETE",
   json: {}
 
+# Feature descriptions
+#---------------------------------------------------------------------------------
 describe 'Requests', ->
   receivedGUID = "ooo"
 
@@ -43,8 +34,7 @@ describe 'Requests', ->
     if test.opts.launchApp
       app = require "../app.js"
 
-    request loginOptions, (error, response, body) ->
-      authCookies = response.headers['set-cookie']
+    request test.loginOptions, (error, response, body) ->
       done()
 
   describe 'Creation', ->
@@ -83,7 +73,7 @@ describe 'Requests', ->
       options.url = baseUrl + receivedGUID
 
       request options, (error, response, body) ->
-        assert.equal body.description,  "Example advice"
+        assert.equal body.description,  "Example request for advice"
         assert.equal body.profession, "Computer geek"
         assert.equal body.age, 56
         done()

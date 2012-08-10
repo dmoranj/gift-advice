@@ -7,8 +7,6 @@ function selectByType(res, req, route, data, code) {
             res.json(data);
         }
 
-
-
     } else {
         res.render("html/" + route, data);
     }

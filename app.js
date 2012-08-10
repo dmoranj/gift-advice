@@ -7,6 +7,7 @@ var express = require('express')
   , home = require('./routes/home')
   , users = require('./routes/users')
   , requests = require('./routes/requests')
+  , advices = require('./routes/advices')
   , http = require('http')
   , path = require('path')
   , fs = require('fs');
@@ -63,8 +64,8 @@ app.get('/users/:requester/requests', requiresLogin, requests.list);
 app.post('/users/:requester/requests', requiresLogin, requests.create);
 app.delete('/users/:requester/requests/:requestId', requiresLogin, requests.delete);
 
-
 // Advice related routes
+app.post('/users/:requester/requests/:requestId/advices', requiresLogin, advices.create);
 
 http.createServer(app).listen(app.get('port'), function(){
 

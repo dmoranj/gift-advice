@@ -1,6 +1,7 @@
 var
     user = require('./user'),
-    adviceRequest = require('./request'),
+    request = require('./request'),
+    advice = require("./advice"),
     mongoose = require('mongoose');
 
 mongoose.connect('mongodb://localhost/friendly-advice');
