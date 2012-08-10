@@ -68,13 +68,13 @@ describe 'Requests', ->
 
     it 'should retrieve the list of request of the given user (and only theirs)', (done) ->
 
-     request optionsList, (error, response, body) ->
-       assert.equal body.requests.length,  2
-       assert.equal body.requests[0].age, 56
-       done()
+      request optionsList, (error, response, body) ->
+        assert.equal body.requests.length,  2
+        assert.equal body.requests[0].age, 56
+        done()
 
   describe 'Find', ->
-    baseUrl = "http://localhost:3000/requests/"
+    baseUrl = "http://localhost:3000/users/godzilla/requests/"
     options =
       method: "GET",
       json: {}

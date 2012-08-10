@@ -9,7 +9,7 @@ exports.create = function (req, res) {
             utils.select(res, req, 'createdRequest', {
                 status: "ERROR",
                 errorMessage: "The request could not be created" + err
-            });
+            }, 500);
         } else {
             utils.select(res, req, 'createdRequest', {
                 status: "OK",
@@ -25,8 +25,8 @@ exports.show = function (req, res) {
         if (err || request == null) {
             utils.select(res, req, 'requestEdition', {
                 status: "ERROR",
-                errorMessage: "The request could not be created" + err
-            });
+                errorMessage: "Request not be found" + err
+            }, 404);
         } else {
             request.status = "OK";
             request.infoMessage = "Request created";
@@ -41,7 +41,7 @@ exports.list = function (req, res) {
             utils.select(res, req, 'requestList', {
                 status: "ERROR",
                 errorMessage: "The request list could not be retrieved from db: " + err
-            });
+            }, 500);
         } else {
             utils.select(res, req, 'requestList', {
                 status:         "OK",
@@ -58,7 +58,7 @@ exports.delete = function(req,res) {
             utils.select(res, req, 'requestList', {
                 status: "ERROR",
                 errorMessage: "The request list could not be removed from db: " + err
-            });
+            }, 500);
         } else {
             utils.select(res, req, 'requestList', {
                 status:         "OK",

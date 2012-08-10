@@ -58,7 +58,7 @@ app.delete('/users/:userId', requiresLogin, users.delete);
 app.get('/users', requiresLogin, users.list);
 
 // Request related routes
-app.get('/requests/:requestId', requiresLogin, requests.show);
+app.get('/users/:requester/requests/:requestId', requiresLogin, requests.show);
 app.get('/users/:requester/requests', requiresLogin, requests.list);
 app.post('/users/:requester/requests', requiresLogin, requests.create);
 app.delete('/users/:requester/requests/:requestId', requiresLogin, requests.delete);
