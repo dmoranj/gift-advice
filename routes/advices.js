@@ -57,8 +57,8 @@ exports.show = function(req, res) {
     });
 }
 
-exports.list = function(req, res) {
-    advices.list(req.params.requestId, function(err, advices) {
+function listAdvices(res, req) {
+    return function (err, advices) {
         if (err) {
             util.select(res, req, 'adviceList', {
                 status: "ERROR",
@@ -71,5 +71,13 @@ exports.list = function(req, res) {
                 advices: advices
             });
         }
-    });
+    }
+}
+
+exports.list = function(req, res) {
+    advices.list(req.params.requestId, listAdvices(res, req));
+}
+
+exports.listByUser = function(req, res) {
+    advices.listByUser(req.params.requester, listAdvices(res, req));
 }

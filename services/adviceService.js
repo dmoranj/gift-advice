@@ -41,3 +41,7 @@ exports.find = function(adviceGuid, callback) {
 exports.list = function(requestGuid, callback) {
     Advice.find({requestGUID: requestGuid}, callback);
 }
+
+exports.listByUser = function(userGuid, callback) {
+    Advice.find({advisor: userGuid}, callback);
+}

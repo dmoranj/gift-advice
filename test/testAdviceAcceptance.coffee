@@ -103,7 +103,16 @@ describe "Advices", ->
           request test.loginOptions, (error, response, body) ->
             done()
 
-    it 'should list all the advices provided by a user'
+    it 'should list all the advices provided by a user', (done) ->
+      options =
+        url:    "http://localhost:3000/users/dmoranj/advices/"
+        method: "GET",
+        json:   {}
+
+      request options, (error, response, body) ->
+        assert.equal body.status, "OK"
+        assert.equal body.advices.length, 1
+        done()
 
     it 'should list all the advices related to a request', (done) ->
       options =
@@ -163,7 +172,7 @@ describe "Advices", ->
         assert.equal body.status, "OK"
         done()
 
-    it 'should allow to remove the advice only to its advisor'
+    it 'should allow to remove advices only to its advisor'
 
   after (done) ->
     deleteFn = (req, callback) ->
