@@ -137,13 +137,20 @@ describe "Advices", ->
         json:   {}
 
       request options, (error, response, body) ->
-        debugger
         assert.equal body.status, "OK"
         assert.equal body.advice.title, "Cookies"
         assert.equal body.advice.urls.length, 2
         done()
 
-    it 'should raise an error if the advice is not found'
+    it 'should raise an error if the advice is not found', (done) ->
+      options =
+        url:    "http://localhost:3000/users/godzilla/requests/" + mainRequestGUID + "/advices/" + "FAKEDGUID"
+        method: "GET",
+        json:   {}
+
+      request options, (error, response, body) ->
+        assert.equal body.status, "ERROR"
+        done()
 
   describe 'Delete', ->
     it 'should remove the selected advice from de DB', (done) ->

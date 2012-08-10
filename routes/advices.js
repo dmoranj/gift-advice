@@ -42,7 +42,7 @@ exports.delete = function(req, res) {
 
 exports.show = function(req, res) {
     advices.find(req.params.adviceId, function(err, advice) {
-        if (err) {
+        if (err || advice == null) {
             util.select(res, req, 'adviceEdition', {
                 status: "ERROR",
                 errorMessage: "Advice could not be found: " + err
