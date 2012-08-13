@@ -106,3 +106,20 @@ describe 'Notifications', ->
 
     it 'should allow to remove the notification only to the receiver'
 
+  after (done) ->
+    options =
+      url:    "http://localhost:3000/users/godzilla/notifications"
+      method: "GET",
+      json: {}
+
+    deleteFn = (notification, callback) ->
+      options.url = "http://localhost:3000/users/godzilla/notifications/" + notification.guid
+      options.method = "DELETE"
+      request options, (error, response, body) ->
+        assert.equal body.status, "OK"
+        callback(null, "OK")
+
+    request options, (error, response, body) ->
+      async.map body.notifications, deleteFn, (entity, callback) ->
+        done()
+
