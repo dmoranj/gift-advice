@@ -3,7 +3,7 @@ var
     utils = require('../services/dataUtils'),
     Notification = db.mongoose.model("Notification");
 
-exports.create = function (sender, notificationData, callback) {
+exports.create = function (sender, receiver, notificationData, callback) {
 
     var notificationToCreate = new Notification();
 
@@ -13,6 +13,7 @@ exports.create = function (sender, notificationData, callback) {
 
     notificationToCreate.guid = utils.getUUID();
     notificationToCreate.sender = sender;
+    notificationToCreate.receiver = receiver;
     notificationToCreate.date = new Date();
     notificationToCreate.save(callback);
 }
@@ -30,4 +31,14 @@ exports.delete = function(notificationId, callback) {
 
 exports.find = function(notificationId, callback) {
     Notification.findOne({guid: notificationId}, callback);
+}
+
+exports.list = function(notificationNumber, requesterId, callback) {
+    /*Notification.find({receiver: requesterId}, callback);*/
+
+    Notification
+        .find({receiver: requesterId})
+        .sort("-date")
+        .limit(notificationNumber)
+        .exec(callback);
 }

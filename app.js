@@ -74,6 +74,7 @@ app.get('/users/:requester/requests/:requestId/advices/:adviceId', requiresLogin
 
 // Notification related routes
 app.post('/users/:requester/notifications', requiresLogin, notifications.create);
+app.get('/users/:requester/notifications', requiresLogin, notifications.list);
 app.get('/users/:requester/notifications/:notificationId', requiresLogin, notifications.show)
 app.delete('/users/:requester/notifications/:notificationId', requiresLogin, notifications.delete);
 

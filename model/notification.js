@@ -10,7 +10,8 @@ var Notification = new Schema({
     title: String,
     date: Date,
     guid: String,
-    sender: String
+    sender: String,
+    receiver: String
 });
 
 mongoose.model("Notification", Notification);
