@@ -7,7 +7,7 @@ exports.showLogin = function(req, res){
 
 exports.login = function(req, res) {
     users.authenticate(req.body.login, req.body.password, function(err, doc) {
-        if (err) {
+        if (err || !doc) {
             utils.select(res, req, 'login', {
                 status: "ERROR",
                 errorMessage: "Wrong user or password"
@@ -34,7 +34,7 @@ exports.register = function(req, res) {
             utils.select(res, req, 'registrationResult', {
                 status: "ERROR",
                 errorMessage: err
-            });
+            }, 500);
         } else {
             utils.select(res, req, 'registrationResult', {
                 status: "OK",

@@ -24,8 +24,9 @@ describe 'Notifications', ->
     if test.opts.launchApp
       app = require "../app.js"
 
-    request test.loginOptions, (error, response, body) ->
-      done()
+    test.createUsers ->
+      request test.loginOptions, (error, response, body) ->
+        done()
 
   describe 'Creation', ->
     options =
@@ -121,5 +122,6 @@ describe 'Notifications', ->
 
     request options, (error, response, body) ->
       async.map body.notifications, deleteFn, (entity, callback) ->
-        done()
+        test.deleteUsers ->
+          done()
 

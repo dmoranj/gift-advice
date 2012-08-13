@@ -53,18 +53,19 @@ describe "Advices", ->
     if test.opts.launchApp
       app = require "../app.js"
 
-    request test.loginOptions, (error, response, body) ->
-      optionsCreateRequest =
-        url: "http://localhost:3000/users/godzilla/requests",
-        method: "POST",
-        json: testRequestParams
+    test.createUsers ->
+      request test.loginOptions, (error, response, body) ->
+        optionsCreateRequest =
+          url: "http://localhost:3000/users/godzilla/requests",
+          method: "POST",
+          json: testRequestParams
 
-      request optionsCreateRequest, (error, response, body) ->
-        mainRequestGUID = body.guid
-        optionsCreateRequest.json = testRequestParams2
         request optionsCreateRequest, (error, response, body) ->
-          forbiddenRequestGUID = body.guid
-          done()
+          mainRequestGUID = body.guid
+          optionsCreateRequest.json = testRequestParams2
+          request optionsCreateRequest, (error, response, body) ->
+            forbiddenRequestGUID = body.guid
+            done()
 
   describe "Creation", ->
     it 'should create advices related to a gift request', (done) ->
@@ -196,4 +197,5 @@ describe "Advices", ->
         async.map body.requests, deleteFn, callback
 
     async.map ["godzilla", "gamera"], deleteListFn, (entity, callback) ->
-      done()
+      test.deleteUsers ->
+        done()
