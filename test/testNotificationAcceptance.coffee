@@ -41,7 +41,18 @@ describe 'Notifications', ->
 
   describe 'Find', ->
 
-    it 'should retrieve the notification from the db'
+    options =
+      method: "GET",
+      json: {}
+
+    it 'should retrieve the notification from the db', (done) ->
+      options.url = "http://localhost:3000/users/godzilla/notifications/" + createdNotificationGUID
+      request options, (error, response, body) ->
+        assert.equal body.status, "OK"
+        assert.equal body.notification.type, "MESSAGE"
+        assert.equal body.notification.title, "Hi there!"
+        done()
+
 
   describe 'Delete', ->
 

@@ -4,40 +4,43 @@ async = require 'async'
 test = require '../testUtils'
 
 testRequestParams =
-  description     : "Example request for advice"
-  advisors        : ["dmoranj"]
-  hobbieTags      : ["cooking", "jogging", "stamps", "tubophonist"]
-  age             : 56
-  profession      : "Computer geek"
+  description: "Example request for advice"
+  advisors: ["dmoranj"]
+  hobbieTags: ["cooking", "jogging", "stamps", "tubophonist"]
+  age: 56
+  profession: "Computer geek"
 
 testRequestParams2 =
-  description     : "Another request for advice"
-  advisors        : ["gamera"]
-  hobbieTags      : ["destroying tokyo", "protecting tokyo from being destroyed"]
-  age             : 56
-  profession      : "B-Movie monster"
+  description: "Another request for advice"
+  advisors: ["gamera"]
+  hobbieTags: ["destroying tokyo", "protecting tokyo from being destroyed"]
+  age: 56
+  profession: "B-Movie monster"
 
 testAdviceParams =
-  title             : "Cookies"
-  text              : "You should always buy cookies",
-  urls              : ["www.google.com", "www.cookie.com"],
-  usefulnes         : 4
+  title: "Cookies"
+  text: "You should always buy cookies",
+  urls: ["www.google.com", "www.cookie.com"],
+  usefulnes: 4
 
 otherAdviceParams =
-  title             : "Ties"
-  text              : "Another boring tie is allways wellcome",
-  urls              : ["www.tie-shop.com"],
-  usefulnes         : 1
+  title: "Ties"
+  text: "Another boring tie is allways wellcome",
+  urls: ["www.tie-shop.com"],
+  usefulnes: 1
 
 optionsList =
-  url:    "http://localhost:3000/users/godzilla/requests",
+  url: "http://localhost:3000/users/godzilla/requests",
   method: "GET",
-  json:   {}
+  json:
+    {}
 
-baseUrlDelete = "http://localhost:3000/users/godzilla/requests/";
+baseUrlDelete = "http://localhost:3000/users/godzilla/requests/"
+
 optionsDelete =
   method: "DELETE",
-  json: {}
+  json:
+    {}
 
 # Feature descriptions
 #---------------------------------------------------------------------------------
@@ -52,9 +55,9 @@ describe "Advices", ->
 
     request test.loginOptions, (error, response, body) ->
       optionsCreateRequest =
-        url:    "http://localhost:3000/users/godzilla/requests",
+        url: "http://localhost:3000/users/godzilla/requests",
         method: "POST",
-        json:   testRequestParams
+        json: testRequestParams
 
       request optionsCreateRequest, (error, response, body) ->
         mainRequestGUID = body.guid
@@ -66,21 +69,21 @@ describe "Advices", ->
   describe "Creation", ->
     it 'should create advices related to a gift request', (done) ->
       options =
-        url:    "http://localhost:3000/users/godzilla/requests/" + mainRequestGUID + "/advices"
+        url: "http://localhost:3000/users/godzilla/requests/" + mainRequestGUID + "/advices"
         method: "POST",
-        json:   testAdviceParams
+        json: testAdviceParams
 
       request options, (error, response, body) ->
         assert.equal body.status, "OK"
-        assert.equal (body.guid != undefined),  true
+        assert.equal (body.guid != undefined), true
         createdAdviceGUID = body.guid
         done()
 
     it 'should not allow non-advisors to create advice', (done) ->
       options =
-        url:    "http://localhost:3000/users/godzilla/requests/" + forbiddenRequestGUID + "/advices"
+        url: "http://localhost:3000/users/godzilla/requests/" + forbiddenRequestGUID + "/advices"
         method: "POST",
-        json:   testAdviceParams
+        json: testAdviceParams
 
       request options, (error, response, body) ->
         assert.equal body.status, "ERROR"
@@ -89,14 +92,13 @@ describe "Advices", ->
     it 'should notify the requester that he has a new advice'
 
   describe "List", ->
-
     alternateAdviceGUID = ""
 
     before (done) ->
       options =
-        url:    "http://localhost:3000/users/godzilla/requests/" + forbiddenRequestGUID + "/advices"
+        url: "http://localhost:3000/users/godzilla/requests/" + forbiddenRequestGUID + "/advices"
         method: "POST",
-        json:   otherAdviceParams
+        json: otherAdviceParams
 
       request test.alternateLoginOptions, (error, response, body) ->
         request options, (error, response, body) ->
@@ -107,9 +109,10 @@ describe "Advices", ->
 
     it 'should list all the advices provided by a user', (done) ->
       options =
-        url:    "http://localhost:3000/users/dmoranj/advices/"
+        url: "http://localhost:3000/users/dmoranj/advices/"
         method: "GET",
-        json:   {}
+        json:
+          {}
 
       request options, (error, response, body) ->
         assert.equal body.status, "OK"
@@ -118,9 +121,10 @@ describe "Advices", ->
 
     it 'should list all the advices related to a request', (done) ->
       options =
-        url:    "http://localhost:3000/users/godzilla/requests/" + forbiddenRequestGUID + "/advices"
+        url: "http://localhost:3000/users/godzilla/requests/" + forbiddenRequestGUID + "/advices"
         method: "GET",
-        json:   {}
+        json:
+          {}
 
       request options, (error, response, body) ->
         assert.equal body.status, "OK"
@@ -129,9 +133,10 @@ describe "Advices", ->
 
     after (done) ->
       options =
-        url:    "http://localhost:3000/users/gamera/requests/" + forbiddenRequestGUID + "/advices/" + alternateAdviceGUID
+        url: "http://localhost:3000/users/gamera/requests/" + forbiddenRequestGUID + "/advices/" + alternateAdviceGUID
         method: "DELETE",
-        json:   {}
+        json:
+          {}
 
       request test.alternateLoginOptions, (error, response, body) ->
         request options, (error, response, body) ->
@@ -140,12 +145,12 @@ describe "Advices", ->
 
 
   describe 'Find', ->
-
     it 'should retrieve the advice information from the db given the GUID', (done) ->
       options =
-        url:    "http://localhost:3000/users/godzilla/requests/" + mainRequestGUID + "/advices/" + createdAdviceGUID
+        url: "http://localhost:3000/users/godzilla/requests/" + mainRequestGUID + "/advices/" + createdAdviceGUID
         method: "GET",
-        json:   {}
+        json:
+          {}
 
       request options, (error, response, body) ->
         assert.equal body.status, "OK"
@@ -155,9 +160,10 @@ describe "Advices", ->
 
     it 'should raise an error if the advice is not found', (done) ->
       options =
-        url:    "http://localhost:3000/users/godzilla/requests/" + mainRequestGUID + "/advices/" + "FAKEDGUID"
+        url: "http://localhost:3000/users/godzilla/requests/" + mainRequestGUID + "/advices/" + "FAKEDGUID"
         method: "GET",
-        json:   {}
+        json:
+          {}
 
       request options, (error, response, body) ->
         assert.equal body.status, "ERROR"
@@ -166,9 +172,10 @@ describe "Advices", ->
   describe 'Delete', ->
     it 'should remove the selected advice from de DB', (done) ->
       options =
-        url:    "http://localhost:3000/users/godzilla/requests/" + forbiddenRequestGUID + "/advices/" + createdAdviceGUID
+        url: "http://localhost:3000/users/godzilla/requests/" + forbiddenRequestGUID + "/advices/" + createdAdviceGUID
         method: "DELETE",
-        json:   {}
+        json:
+          {}
 
       request options, (error, response, body) ->
         assert.equal body.status, "OK"

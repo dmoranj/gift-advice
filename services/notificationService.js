@@ -27,3 +27,7 @@ exports.delete = function(notificationId, callback) {
         }
     });
 }
+
+exports.find = function(notificationId, callback) {
+    Notification.findOne({guid: notificationId}, callback);
+}

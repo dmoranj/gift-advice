@@ -12,6 +12,8 @@
         "async": "*",
         "socket.io": "*",
         "mocha" : "*",
-        "request": "*"
+        "request": "*",
+        "coffee-script": "*"
+
     }
 }

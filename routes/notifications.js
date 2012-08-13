@@ -30,9 +30,26 @@ exports.delete = function(req, res) {
         } else {
             util.select(res, req, 'removeNotification', {
                 status: 'OK',
-                infoMessage: 'Notification removed',
+                infoMessage: 'Notification removed'
             })
         }
 
     })
+}
+
+exports.show = function(req, res) {
+    notifications.find(req.params.notificationId, function(err, notification) {
+        if (err) {
+            util.select(res, req, 'notificationEdition', {
+                status: "ERROR",
+                errorMessage: "Couldn't remove the notification"
+            })
+        } else {
+            util.select(res, req, 'notificationEdition', {
+                status: 'OK',
+                infoMessage: 'Notification removed',
+                notification: notification
+            })
+        }
+    });
 }
