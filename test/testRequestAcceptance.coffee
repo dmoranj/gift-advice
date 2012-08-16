@@ -34,8 +34,9 @@ describe 'Requests', ->
     if test.opts.launchApp
       app = require "../app.js"
 
-    request test.loginOptions, (error, response, body) ->
-      done()
+    test.createUsers ->
+      request test.loginOptions, (error, response, body) ->
+        done()
 
   describe 'Creation', ->
     it 'should persist the request in the db', (done) ->
@@ -49,7 +50,17 @@ describe 'Requests', ->
         receivedGUID = body.guid
         done()
 
-    it 'should notify the advisors that they have a new request'
+    it 'should notify the advisors that they have a new request', (done) ->
+      options =
+        url:    "http://localhost:3000/users/dmoranj/notifications?last=2"
+        method: "GET",
+        json: {}
+
+      request options, (error, response, body) ->
+        assert.equal body.notifications.length, 2
+        assert.equal body.notifications[0].type, "REQUEST"
+        done()
+
 
   describe 'List', ->
     before (done) ->
@@ -115,4 +126,5 @@ describe 'Requests', ->
         async.map body.requests, deleteFn, callback
 
     async.map ["godzilla", "gamera"], deleteListFn, (entity, callback) ->
-      done()
+      test.deleteUsers ->
+        done()

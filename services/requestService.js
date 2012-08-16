@@ -1,6 +1,8 @@
 var
     db = require("../model/dbUtils"),
     utils = require("./dataUtils"),
+    notification = require("./notificationService"),
+    async = require('async'),
     Request = db.mongoose.model('Request');
 
 
@@ -16,7 +18,27 @@ function saveRequest(requestData, callback) {
             requestToCreate[attribute] = requestData[attribute];
         }
         requestToCreate.guid = utils.getUUID();
-        requestToCreate.save(callback);
+
+        var notifyAdvisor = function(advisor, mapCallback) {
+            mapCallback(null, function(callback) {
+                var notificationData = {
+                    sender: requestData.requester,
+                    receiver: advisor,
+                    type: "REQUEST",
+                    title: "A new request for advice",
+                    text: "A new request for advice from ${user} for ${user}"
+                };
+                notification.create(requestToCreate.requester, advisor, notificationData, function(err, not) {
+                    callback(null, not);
+                });
+            });
+        }
+
+        async.map(requestToCreate.advisors, notifyAdvisor, function(err, notifyingFunctions) {
+            async.parallel(notifyingFunctions, function(err, results) {
+                requestToCreate.save(callback);
+            });
+        });
     }
 }
 
