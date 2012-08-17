@@ -35,6 +35,13 @@ app.configure('development', function(){
     app.use(express.static(path.join(__dirname, 'public')));
 });
 
+app.configure('testing', function(){
+    app.use(express.errorHandler());
+    app.use(express.session({ secret: 'your secret here' }));
+    app.use(app.router);
+    app.use(express.static(path.join(__dirname, 'public')));
+});
+
 app.configure('production', function(){
     var RedisStore = require('connect-redis')(express);
     var sessionStore = new RedisStore();
@@ -93,4 +100,8 @@ app.delete('/users/:requester/notifications/:notificationId', requiresLogin, not
 
 http.createServer(app).listen(app.get('port'), function(){
 
+});
+
+require("./model/dbUtils").cleanDb(function() {
+   console.log("Ejecutando callback");
 });

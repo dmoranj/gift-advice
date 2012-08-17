@@ -2,6 +2,7 @@ assert = require 'assert'
 request = require 'request'
 async = require 'async'
 test = require '../testUtils'
+dbs = require '../model/dbUtils'
 
 testRequestParams =
   description: "Example request for advice"
@@ -50,6 +51,8 @@ describe "Advices", ->
   createdAdviceGUID = ""
 
   before (done) ->
+    dbs.cleanDb();
+
     if test.opts.launchApp
       app = require "../app.js"
 
@@ -205,6 +208,12 @@ describe "Advices", ->
       request optionsList, (error, response, body) ->
         async.map body.requests, deleteFn, callback
 
+    optionsListNots =
+      url: ""
+      method: ""
+      json: {}
+
     async.map ["godzilla", "gamera"], deleteListFn, (entity, callback) ->
       test.deleteUsers ->
-        done()
+        dbs.cleanDb ->
+          done()

@@ -1,6 +1,8 @@
 var request = require("request"),
     assert = require("assert");
 
+process.env.NODE_ENV = "testing"
+
 var loginParams = {
     login: "dmoranj",
     nickname: "dmoranj",
