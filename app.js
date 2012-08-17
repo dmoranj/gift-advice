@@ -25,14 +25,26 @@ app.configure(function(){
   app.use(express.logger({stream: logFile}));
   app.use(express.bodyParser());
   app.use(express.cookieParser('The red dog is feeling blue'));
-  app.use(express.session());
-  app.use(app.router);
-  app.use(express.static(path.join(__dirname, 'public')));
+
 });
 
 app.configure('development', function(){
-  app.use(express.errorHandler());
+    app.use(express.errorHandler());
+    app.use(express.session({ secret: 'your secret here' }));
+    app.use(app.router);
+    app.use(express.static(path.join(__dirname, 'public')));
 });
+
+app.configure('production', function(){
+    var RedisStore = require('connect-redis')(express);
+    var sessionStore = new RedisStore();
+
+    app.use(express.errorHandler());
+    app.use(express.session({ store: sessionStore , secret: "Bring me the golden peanuts, you fool!", key: 'express.sid'}));
+    app.use(app.router);
+    app.use(express.static(path.join(__dirname, 'public')));
+});
+
 
 // Middleware
 //--------------------------------------------------------------------------------

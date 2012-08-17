@@ -84,6 +84,13 @@ describe 'Users', ->
         assert.equal body.status,  "ERROR"
         done()
 
+  describe 'Update', ->
+    it 'should let the user change its password'
+
+    it "shouldn't let the user change its nickname"
+
+    it 'should let the user change its personal data'
+
   describe 'Delete', ->
     it 'should remove the user from the db', (done) ->
         deleteOptions =

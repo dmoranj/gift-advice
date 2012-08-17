@@ -13,7 +13,8 @@
         "socket.io": "*",
         "mocha" : "*",
         "request": "*",
-        "coffee-script": "*"
+        "coffee-script": "*",
+        "connect-redis": "*"
 
     }
 }
