@@ -1,8 +1,23 @@
 var db = require('../model/dbUtils'),
+    notification = require('../services/notificationService'),
     utils = require('../services/dataUtils');
 
 var Advice = db.mongoose.model('Advice');
 var Request = db.mongoose.model('Request');
+
+function createAdviceNotification(requester, advice, callback) {
+    var notificationData = {
+        sender: advice.advisor,
+        receiver: requester,
+        type: "ADVICE",
+        title: "A new request for advice",
+        text: "A new request for advice from ${user} for ${user}"
+    };
+
+    notification.create(advice.advisor, requester, notificationData, function(err, not) {
+        callback(null, advice);
+    });
+}
 
 exports.create = function(adviceToCreate, callback) {
     var advice = new Advice();
@@ -19,7 +34,9 @@ exports.create = function(adviceToCreate, callback) {
         } else if ( request.advisors.indexOf(advice.advisor) < 0) {
             callback("These request don't have the user as an advisor", null)
         } else {
-            advice.save(callback)
+            advice.save(function (err, savedAdvice) {
+                createAdviceNotification(request.requester, savedAdvice, callback);
+            });
         }
     });
 }

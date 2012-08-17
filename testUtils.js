@@ -14,7 +14,7 @@ var alternateParams = {
 }
 
 exports.opts = {
-    launchApp: false
+    launchApp: true
 }
 
 exports.loginOptions = {

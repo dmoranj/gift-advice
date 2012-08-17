@@ -90,7 +90,16 @@ describe "Advices", ->
         assert.equal body.status, "ERROR"
         done()
 
-    it 'should notify the requester that he has a new advice'
+    it 'should notify the requester that he has a new advice', (done) ->
+      options =
+        url:    "http://localhost:3000/users/godzilla/notifications?last=2"
+        method: "GET",
+        json: {}
+
+      request options, (error, response, body) ->
+        assert.equal body.notifications.length, 1
+        assert.equal body.notifications[0].type, "ADVICE"
+        done()
 
   describe "List", ->
     alternateAdviceGUID = ""
